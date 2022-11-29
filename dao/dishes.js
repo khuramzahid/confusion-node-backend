@@ -195,7 +195,7 @@ const addDishComment = async (req, res, next) => {
             author
         } = req.body;
 
-        const insertedComment = await models.Comment.create({
+        await models.Comment.create({
             dishId: req.params.dishId,
             rating,
             comment,
@@ -204,7 +204,7 @@ const addDishComment = async (req, res, next) => {
             updatedAt: new Date()
         }, { returning: true });
         
-        res.end('Added comment: ' + insertedComment.id);
+        await getDish(req, res, next);
     }
     catch(error) {
         next(error);
@@ -218,7 +218,7 @@ const deleteDishComments = async (req, res, next) => {
                 dishId: req.params.dishId
             }
         });
-        res.end('Deleted all comments for dish Id: ' + req.params.dishId);
+        await getDish(req, res, next);
     }
     catch(error) {
         next(error);
@@ -276,7 +276,7 @@ const updateDishComment = async (req, res, next) => {
             plain: true
         });
 
-        res.end('Updated dish comment: ' + req.params.commentId);
+        await getDish(req, res, next);
     }
     catch(error) {
         next(error);
@@ -303,7 +303,7 @@ const deleteDishComment = async (req, res, next) => {
                 id: req.params.commentId
             }
         });
-        res.end('Deleted comment: ' + req.params.commentId);
+        await getDish(req, res, next);
     }
     catch(error) {
         next(error);

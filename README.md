@@ -1,53 +1,56 @@
-## CREATE DATABASE
+# ConFusion Node Backend
 
-sudo mysql;
-CREATE DATABASE confusion;
-SET GLOBAL validate_password.policy=LOW;
-CREATE USER 'confuseduser'@'localhost' IDENTIFIED BY 'enigma123!';
-GRANT ALL ON confusion.* TO 'confuseduser'@'localhost' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-exit
-sudo mysql -u confuseduser -p confusion
+## Create Database
 
-## SEQUELIZE Migration Setup
+1. `sudo mysql`
+2. `CREATE DATABASE confusion;`
+3. `SET GLOBAL validate_password.policy=LOW;`
+4. `CREATE USER 'confuseduser'@'localhost' IDENTIFIED BY 'enigma123!';`
+5. `GRANT ALL ON confusion.* TO 'confuseduser'@'localhost' WITH GRANT OPTION;`
+6. `FLUSH PRIVILEGES;`
+7. `exit`
+8. `sudo mysql -u confuseduser -p confusion`
 
-[If-no-Sequelize-Migration-File-exist]sequelize init
-[Generating-Migration-File] sequelize model:generate --name User --attributes firstName:string,lastName:string,email:string
-[Generating-Seeder-File] sequelize seed:generate --name demo-user
-[Starting-Point] npm install
-sequelize db:migrate
-sequelize db:seed:all
+## Application Setup
 
-## FOR ENV variables
+1. Run `npm install`
+2. Run `sequelize db:migrate`
+3. Run `sequelize db:seed:all`
+4. In the terminal, type `touch .env`
+5. In the terminal, type `node` to open Node REPL
+6. Type `require('crypto').randomBytes(64).toString('hex')` 2 times to get the values for the following constants
+    `ACCESS_TOKEN_SECRET=<hexcode 1>`\
+    `REFRESH_TOKEN_SECRET=<hexcode 2>`
+7. Enter the text above in the .env file
+8. Run `cd bin`
+9. Run `openssl genrsa 1024 > private.key`
+10. Run `openssl req -new -key private.key -out cert.csr`
+11. Run `openssl x509 -req -in cert.csr -signkey private.key -out certificate.pem`
+12. Run `npm start`
+13. Open Postman and send the following request (body option x-www-form-urlencoded):
+```
+        POST https://localhost:3443/users/signup
+        {
+            "username": "confuseduser",
+            "password": "password"
+        }
+```
+14. Open mysql REPL in the terminal and execute the following query on the `confusion` schema:
+        `UPDATE Users SET admin = 1;`
+15. Pull code from the repository https://github.com/khuramzahid/conFusion-Angular6 in a convenient directory
+16. Check out the commit `2203e436acf8b49a377cb099fb53736d39711791`
+17. Run `npm install`
+18. Run  `sudo npm install --save-dev  --unsafe-perm node-sass`
+19. Run `npm start`
 
-touch .env
-node REPL
-require('crypto').randomBytes(64).toString('hex')
-ACCESS_TOKEN_SECRET=<hexcode 1>
-REFRESH_TOKEN_SECRET=<hexcode 2>
-
-## HTTPS
-
-cd bin
-openssl genrsa 1024 > private.key
-openssl req -new -key private.key -out cert.csr
-openssl x509 -req -in cert.csr -signkey private.key -out certificate.pem
-
-POST on POSTMAN body option x-www-form-urlencoded
-
-## Start Application
-
-npm start
-
-POST https://localhost:3443/users/signup
-{
-    "username": "khuram",
-    "password": "password"
-}
-
-UPDATE Users SET admin = 1;
-
-## Acknowledgments
+## Acknowledgement
 
 Jogesh Muppala 
-https://github.com/jmuppala/conFusion-Angular6 commit 2203e436acf8b49a377cb099fb53736d39711791 
+https://github.com/jmuppala/
+
+## Sequelize Help
+
+1. To initialize Sequelize if already not done, type `sequelize init` in the terminal
+2. Sample command to generate a new migration file `sequelize model:generate --name User --attributes firstName:string,lastName:string,email:string`
+3. Sample command to generate a new seeder file `sequelize seed:generate --name demo-user`
+

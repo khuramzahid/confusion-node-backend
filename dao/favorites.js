@@ -26,7 +26,7 @@ const getFavorites = async (req,res,next) => {
                 }
             });
             dishes.push({
-                id: favorites[j].dishId,
+                _id: favorites[j].dishId,
                 name: dish.name,
                 image: dish.image
             });
