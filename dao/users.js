@@ -4,6 +4,10 @@ var authenticate = require('../authenticate');
 
 const signupHandler = async (req, res, next) => {
   try {
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(regex.test(req.body.username)) {
+      throw new Error('username must be an email address.');
+    }
     models.User.register(new models.User({username: req.body.username}), req.body.password, (err, user) => {
       if(err) {
         res.statusCode = 500;
